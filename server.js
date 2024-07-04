@@ -9,6 +9,7 @@ const corsOptions = {
   optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
 };
 app.use(cors(corsOptions));
+app.use(express.json());
 let CREDENTIALS;
 
 try {
@@ -25,6 +26,11 @@ const translate = new Translate({
 
 app.post("/translate", async (req, res) => {
   const { text, targetLanguage } = req.body;
+  if (!text || !targetLanguage) {
+    return res
+      .status(400)
+      .json({ error: "Missing text or targetLanguage in request body" });
+  }
   try {
     const [response] = await translate.translate(text, targetLanguage);
     res.send({ translatedText: response });
