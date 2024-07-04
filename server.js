@@ -1,10 +1,14 @@
-const express = require("express");
 const { Translate } = require("@google-cloud/translate").v2;
 require("dotenv").config();
 
+const express = require("express");
+const cors = require("cors");
 const app = express();
-app.use(express.json());
-
+const corsOptions = {
+  origin: "http://localhost:3000", // Allow requests from this origin
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
+};
+app.use(cors(corsOptions));
 let CREDENTIALS;
 
 try {
